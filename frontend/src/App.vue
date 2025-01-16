@@ -7,7 +7,7 @@ import { useIsMobile } from './utils/composables'
 import Header from './views/Header.vue';
 import Footer from './views/Footer.vue';
 import { api } from './api'
-
+import { lightThemeOverrides,darkThemeOverrides } from './style/theme/index.js';
 const {
   isDark, loading, useSideMargin, telegramApp, isTelegram
 } = useGlobalState()
@@ -58,29 +58,32 @@ onMounted(async () => {
 </script>
 
 <template>
-  <n-config-provider :locale="localeConfig" :theme="theme">
-    <n-global-style />
-    <n-spin description="loading..." :show="loading">
-      <n-message-provider container-style="margin-top: 20px;">
-        <n-grid x-gap="12" :cols="12">
-          <n-gi v-if="showSideMargin" span="1"></n-gi>
-          <n-gi :span="!showSideMargin ? 12 : 10">
-            <div class="main">
-              <n-space vertical>
-                <n-layout style="min-height: 80vh;">
-                  <Header />
-                  <router-view></router-view>
-                </n-layout>
-                <Footer />
-              </n-space>
-            </div>
-          </n-gi>
-          <n-gi v-if="showSideMargin" span="1"></n-gi>
-        </n-grid>
-        <n-back-top />
-      </n-message-provider>
-    </n-spin>
-  </n-config-provider>
+  <div class="my-header-content">
+    <n-config-provider :locale="localeConfig" :theme="theme" :theme-overrides="theme !=null ? darkThemeOverrides : lightThemeOverrides">
+      <n-global-style />
+      <n-spin description="loading..." :show="loading">
+        <n-message-provider container-style="margin-top: 20px;">
+          <n-grid x-gap="12" :cols="12">
+            <n-gi v-if="showSideMargin" span="1"></n-gi>
+            <n-gi :span="!showSideMargin ? 12 : 10">
+              <div class="main">
+                <n-space vertical>
+                  <n-layout style="min-height: 80vh;">
+                    <Header />
+                    <router-view></router-view>
+                  </n-layout>
+                  <Footer />
+                </n-space>
+              </div>
+            </n-gi>
+            <n-gi v-if="showSideMargin" span="1"></n-gi>
+          </n-grid>
+          <n-back-top />
+        </n-message-provider>
+      </n-spin>
+    </n-config-provider>
+  </div>
+
 </template>
 
 
@@ -88,6 +91,9 @@ onMounted(async () => {
 .n-switch {
   margin-left: 10px;
   margin-right: 10px;
+}
+.my-header-content {
+  font-family: 'poetize-font', sans-serif;
 }
 </style>
 
