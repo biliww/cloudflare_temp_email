@@ -122,6 +122,7 @@ const getSettings = async () => {
 const getUserOpenSettings = async (message) => {
     try {
         const res = await api.fetch(`/user_api/open_settings`);
+        console.log("getUserOpenSettings:--"+JSON.stringify(res))
         Object.assign(userOpenSettings.value, res);
     } catch (error) {
         message.error(error.message || "fetch settings failed");

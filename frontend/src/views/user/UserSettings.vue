@@ -195,17 +195,17 @@ const renamePasskey = async () => {
 <template>
     <div class="center" v-if="userSettings.user_email">
         <n-card :bordered="false" embedded>
-            <n-button @click="showPasskeyList = true; fetchPasskeyList();" secondary block strong>
-                {{ t('showPasskeyList') }}
-            </n-button>
-            <n-button @click="showCreatePasskey = true" type="primary" secondary block strong>
-                {{ t('createPasskey') }}
-            </n-button>
-            <n-alert :show-icon="false" :bordered="false">
-                <span>
-                    {{ t('passordTip') }}
-                </span>
-            </n-alert>
+<!--            <n-button @click="showPasskeyList = true; fetchPasskeyList();" secondary block strong>-->
+<!--                {{ t('showPasskeyList') }}-->
+<!--            </n-button>-->
+<!--            <n-button @click="showCreatePasskey = true" type="primary" secondary block strong>-->
+<!--                {{ t('createPasskey') }}-->
+<!--            </n-button>-->
+<!--            <n-alert :show-icon="false" :bordered="false">-->
+<!--                <span>-->
+<!--                    {{ t('passordTip') }}-->
+<!--                </span>-->
+<!--            </n-alert>-->
             <n-button @click="showLogout = true" secondary block strong>
                 {{ t('logout') }}
             </n-button>

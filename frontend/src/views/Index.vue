@@ -94,6 +94,7 @@ const mailBoxKey = ref("")
 const mailIdQuery = ref("")
 const showMailIdQuery = ref(false)
 
+
 const queryMail = () => {
   mailBoxKey.value = Date.now();
 }
@@ -117,9 +118,11 @@ onMounted(() => {
 
 <template>
   <div>
+    <!--  这里是更换邮件 复制邮件的组件-->
     <AddressBar />
     <n-tabs v-if="settings.address" type="card" v-model:value="indexTab" :placement="globalTabplacement">
       <n-tab-pane name="mailbox" :tab="t('mailbox')">
+<!--        判断是否允许查询的地方-->
         <div v-if="showMailIdQuery" style="margin-bottom: 10px;">
           <n-input-group>
             <n-input v-model:value="mailIdQuery" />
@@ -132,13 +135,15 @@ onMounted(() => {
           :saveToS3="saveToS3" :enableUserDeleteEmail="openSettings.enableUserDeleteEmail"
           :fetchMailData="fetchMailData" :deleteMail="deleteMail" />
       </n-tab-pane>
-      <n-tab-pane name="sendbox" :tab="t('sendbox')">
-        <SendBox :fetchMailData="fetchSenboxData" :enableUserDeleteEmail="openSettings.enableUserDeleteEmail"
-          :deleteMail="deleteSenboxMail" />
-      </n-tab-pane>
-      <n-tab-pane name="sendmail" :tab="t('sendmail')">
-        <SendMail />
-      </n-tab-pane>
+<!--      发件箱-->
+<!--      <n-tab-pane name="sendbox" :tab="t('sendbox')">-->
+<!--        <SendBox :fetchMailData="fetchSenboxData" :enableUserDeleteEmail="openSettings.enableUserDeleteEmail"-->
+<!--          :deleteMail="deleteSenboxMail" />-->
+<!--      </n-tab-pane>-->
+<!--      发送邮件-->
+<!--      <n-tab-pane name="sendmail" :tab="t('sendmail')">-->
+<!--        <SendMail />-->
+<!--      </n-tab-pane>-->
       <n-tab-pane name="accountSettings" :tab="t('accountSettings')">
         <AccountSettings />
       </n-tab-pane>

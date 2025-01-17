@@ -84,6 +84,7 @@ const menuOptions = computed(() => [
                 size: "small",
                 type: menuValue.value == "home" ? "primary" : "default",
                 style: "width: 100%",
+                // 跳转主页
                 onClick: async () => {
                     await router.push(getRouterPathWithLang('/', locale.value));
                     showMobileMenu.value = false;
@@ -103,6 +104,7 @@ const menuOptions = computed(() => [
                 size: "small",
                 type: menuValue.value == "user" ? "primary" : "default",
                 style: "width: 100%",
+                // 跳转用户
                 onClick: async () => {
                     await router.push(getRouterPathWithLang("/user", locale.value));
                     showMobileMenu.value = false;

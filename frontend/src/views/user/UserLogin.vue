@@ -15,6 +15,8 @@ const {
     userJwt, userOpenSettings, openSettings,
     userOauth2SessionState, userOauth2SessionClientID
 } = useGlobalState()
+
+console.log("userLogin.vue---进入:userOpenSettings.enable:"+JSON.stringify(userOpenSettings))
 const message = useMessage();
 
 const { t } = useI18n({
@@ -224,13 +226,13 @@ onMounted(async () => {
                     <n-button @click="showModal = true" type="info" quaternary size="tiny">
                         {{ t('forgotPassword') }}
                     </n-button>
-                    <n-divider />
-                    <n-button @click="passkeyLogin" type="primary" block secondary strong>
-                        <template #icon>
-                            <n-icon :component="KeyFilled" />
-                        </template>
-                        {{ t('loginWithPasskey') }}
-                    </n-button>
+<!--                    <n-divider />-->
+<!--                    <n-button @click="passkeyLogin" type="primary" block secondary strong>-->
+<!--                        <template #icon>-->
+<!--                            <n-icon :component="KeyFilled" />-->
+<!--                        </template>-->
+<!--                        {{ t('loginWithPasskey') }}-->
+<!--                    </n-button>-->
                     <n-button @click="oauth2Login(item.clientID)" v-for="item in userOpenSettings.oauth2ClientIDs"
                         :key="item.clientID" block secondary strong>
                         {{ t('loginWith', { provider: item.name }) }}
@@ -238,6 +240,7 @@ onMounted(async () => {
                 </n-form>
             </n-tab-pane>
             <n-tab-pane v-if="userOpenSettings.enable" name="signup" :tab="t('register')">
+<!--            <n-tab-pane v-if="true" name="signup" :tab="t('register')">-->
                 <n-form>
                     <n-form-item-row :label="t('email')" required>
                         <n-input v-model:value="user.email" />

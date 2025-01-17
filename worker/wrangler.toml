@@ -2,23 +2,25 @@ name = "cloudflare_temp_email"
 main = "src/worker.ts"
 compatibility_date = "2024-09-23"
 compatibility_flags = [ "nodejs_compat" ]
-# if you want use custom_domain, you need to add routes
+# if you want use custom_domain, you need to add routes 如果你想使用自定义域名，你需要添加 routes 配置
 # routes = [
-# 	{ pattern = "temp-email-api.xxxxx.xyz", custom_domain = true },
+# 	{ pattern = "https://mail.wangpl.online", custom_domain = true },
 # ]
 
 # enable cron if you want set auto clean up
 # [triggers]
 # crons = [ "0 0 * * *" ]
-
-# send_email = [
-#    { name = "SEND_MAIL" },
-# ]
+# 通过 Cloudflare 发送邮件
+ send_email = [
+    { name = "SEND_MAIL" },
+ ]
 
 [vars]
-# TITLE = "Custom Title" # custom title
-# ANNOUNCEMENT = "Custom Announcement"
-PREFIX = "tmp"
+# custom title 自定义网站标题
+TITLE = "TEMP EMAIL"
+# 自定义公告
+ANNOUNCEMENT = "您好,欢迎使用"
+PREFIX = ""  # 要处理的邮箱名称前缀，不需要后缀可配置为空字符串
 # address check REGEX, if not set, will not check
 # ADDRESS_CHECK_REGEX = "^(?!.*admin).*"
 # address name replace REGEX, if not set, the default is [^a-z0-9]
@@ -29,19 +31,20 @@ PREFIX = "tmp"
 # IF YOU WANT TO MAKE YOUR SITE PRIVATE, UNCOMMENT THE FOLLOWING LINES
 # PASSWORDS = ["123", "456"]
 # For admin panel
- ADMIN_PASSWORDS = ["admin", "admin"]
+ ADMIN_PASSWORDS = ["admin", "LIS7469823754@mail"]
 # warning: no password or user check for admin portal
 # DISABLE_ADMIN_PASSWORD_CHECK = false
 # ADMIN CONTACT, CAN BE ANY STRING
-# ADMIN_CONTACT = "xx@xx.xxx"
-DEFAULT_DOMAINS = ["wangpl.online"] # domain name for no role users
+ ADMIN_CONTACT = "843145936@qq.com"
+DEFAULT_DOMAINS = ["wangpl.online"] # domain name for no role users  # 默认用户可用的域名(未登录或未分配角色的用户)
 DOMAINS = ["wangpl.online"] # all domain names
 # For chinese domain name, you can use DOMAIN_LABELS to show chinese domain name
 # DOMAIN_LABELS = ["中文.xxx", "xxx.xxx2"]
-# USER_DEFAULT_ROLE = "vip" # default role for new users(only when enable mail verification)
+ USER_DEFAULT_ROLE = "vip" # default role for new users(only when enable mail verification)
 # ADMIN_USER_ROLE = "admin" # the role which can access admin panel
 # User roles configuration, if domains is empty will use default_domains, if prefix is null will use default prefix, if prefix is empty string will not use prefix
  USER_ROLES = [
+    { domains = ["wangpl.online"], role = "visitor", prefix = "visitor" },
     { domains = ["wangpl.online"], role = "vip", prefix = "vip" },
     { domains = ["wangpl.online"], role = "admin", prefix = "" },
  ]
@@ -50,7 +53,8 @@ BLACK_LIST = ""
 # Allow users to create email addresses
 ENABLE_USER_CREATE_EMAIL = true
 # Disable anonymous user create email, if set true, users can only create email addresses after logging in
-# DISABLE_ANONYMOUS_USER_CREATE_EMAIL = true
+#禁用匿名用户创建邮箱，如果设置为 true，则用户只能在登录后创建邮箱地址
+DISABLE_ANONYMOUS_USER_CREATE_EMAIL = true
 # Allow users to delete messages
 ENABLE_USER_DELETE_EMAIL = true
 # Allow automatic replies to emails
@@ -103,15 +107,15 @@ database_id = "57be3030-41c9-47e5-8d59-04119b8da73c"
 # kv config for send email verification code
  [[kv_namespaces]]
  binding = "KV"
- id = "ddc7ad9e0a224b9d8c79642511bc9626"
+ id = "c78856b5ebec4a76b4400380ad4c77ea"
 
 # ratelimit config for /api/new_address
-# [[unsafe.bindings]]
-# name = "RATE_LIMITER"
-# type = "ratelimit"
-# namespace_id = "1001"
-# # 10 requests per minute
-# simple = { limit = 10, period = 60 }
+ [[unsafe.bindings]]
+ name = "RATE_LIMITER"
+ type = "ratelimit"
+ namespace_id = "1001"
+ # 10 requests per minute
+ simple = { limit = 10, period = 60 }
 
 # binding another worker service (parse the code or link), e.g. auth-inbox
 # [[services]]

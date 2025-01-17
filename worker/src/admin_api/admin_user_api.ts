@@ -31,6 +31,7 @@ export default {
         if (settings.maxAddressCount < 0) {
             return c.text("Invalid maxAddressCount", 400)
         }
+				// 存储settings数据库表的地方
         await saveSetting(c, CONSTANTS.USER_SETTINGS_KEY, JSON.stringify(settings));
         return c.json({ success: true })
     },
