@@ -11,6 +11,8 @@ api.get('/open_api/settings', async (c) => {
     // check header x-custom-auth
     let needAuth = false;
     const passwords = getPasswords(c);
+		// 各种配置
+		// console.log("/open_api/settings:c:"+JSON.stringify(c))
     if (passwords && passwords.length > 0) {
         const auth = c.req.raw.headers.get("x-custom-auth");
         needAuth = !auth || !passwords.includes(auth);

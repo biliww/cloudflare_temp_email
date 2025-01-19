@@ -212,6 +212,7 @@ api.post('/api/send_mail', async (c) => {
 
 api.post('/external/api/send_mail', async (c) => {
     const { token } = await c.req.json();
+		console.log("/external/api/send_mail:"+token)
     try {
         const { address } = await Jwt.verify(token, c.env.JWT_SECRET, "HS256");
         if (!address) {

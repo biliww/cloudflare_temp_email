@@ -71,6 +71,21 @@ wrangler d1 execute dev  --command="INSERT INTO settings(key,value) VALUES ('use
 
 
 
+```
+wrangler d1 execute dev --command "SELECT * FROM raw_mails" --local
+```
+
+
+
+## 线上数据导入本地D1
+
+```
+wrangler d1 execute dev --command "SELECT * FROM your_table_name" > exported_data.sql
+
+```
+
+
+
 # 线上
 
 ## 初始化项目

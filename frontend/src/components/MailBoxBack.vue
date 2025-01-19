@@ -72,23 +72,6 @@ const showMultiActionDelete = ref(false)
 const multiActionDownloadZip = ref({})
 const multiActionDeleteProgress = ref({ percentage: 0, tip: '0/0' })
 
-
-// 用于记录当前悬停的项的 ID
-const hoveredItemId = ref(null);
-// 鼠标悬停时显示图标
-const handleListMouseOver = (id) => {
-  hoveredItemId.value = id;
-};
-// 鼠标离开时隐藏图标
-const handleListMouseLeave = () => {
-  hoveredItemId.value = null;
-};
-
-const handleCardMouseOver = () => {
-  hoveredItemId.value = null;
-};
-
-
 const { t } = useI18n({
   messages: {
     en: {
@@ -123,8 +106,8 @@ const { t } = useI18n({
       deleteMailTip: '确定要删除邮件吗?',
       reply: '回复',
       forwardMail: '转发',
-      showTextMail: '显示纯文本',
-      showHtmlMail: '显示HTML',
+      showTextMail: '显示纯文本邮件',
+      showHtmlMail: '显示HTML邮件',
       saveToS3: '保存到S3',
       multiAction: '多选',
       cancelMultiAction: '取消多选',
@@ -229,7 +212,6 @@ const mailItemClass = (row) => {
 
 const deleteMail = async () => {
   try {
-    console.log("删除邮件:curMail.value.id:"+curMail.value.id)
     await props.deleteMail(curMail.value.id);
     message.success(t("success"));
     curMail.value = null;
@@ -400,11 +382,17 @@ onBeforeUnmount(() => {
 <!--          </n-button>-->
           <n-pagination v-model:page="page" v-model:page-size="pageSize" :item-count="count" :page-sizes="[20, 50, 100]" size="small"
             >
+            <template #prev>
+              back
+            </template>
+            <template #next>
+              go
+            </template>
           </n-pagination>
 <!--           show-size-picker-->
 
 <!--          自动刷新-->
-          <n-switch v-model:value="autoRefresh" :round="true">
+          <n-switch v-model:value="autoRefresh" :round="false">
             <template #checked>
               {{ t('refreshAfter', { msg: autoRefreshInterval }) }}
             </template>
@@ -412,65 +400,56 @@ onBeforeUnmount(() => {
               {{ t('autoRefresh') }}
             </template>
           </n-switch>
-          <n-icon @click="backFirstPageAndRefresh" size="23" class="icon-hover" style="display: flex; align-items: center; height: 100%;">
+
+          <n-icon @click="backFirstPageAndRefresh" size="30" class="icon-hover">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11A8.1 8.1 0 0 0 4.5 9M4 5v4h4"></path><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path></g></svg>
           </n-icon>
 
-
+<!--          <n-button @click="backFirstPageAndRefresh" type="primary" tertiary>-->
+<!--            {{ t('refresh') }}-->
+<!--          </n-button>-->
         </n-space>
       </div>
       <n-split class="left" direction="horizontal" :max="0.75" :min="0.25" :default-size="mailboxSplitSize"
-        :on-update:size="onSpiltSizeChange"  >
+        :on-update:size="onSpiltSizeChange">
         <!--            收件箱信息列表-->
-        <template #1 >
+        <template #1>
           <div style="overflow: auto; height: 80vh;">
-            <n-list hoverable clickable >
+            <n-list hoverable clickable>
               <n-list-item v-for="row in data" v-bind:key="row.id" @click="() => clickRow(row)"
-                :class="mailItemClass(row)"   @mouseover="handleListMouseOver(row.id)"  >
-
-<!--                @mouseleave="handleListMouseLeave"-->
+                :class="mailItemClass(row)">
                 <template #prefix v-if="multiActionMode">
                   <n-checkbox v-model:checked="row.checked" />
                 </template>
 
-                <n-thing  :title="row.subject" >
+                <n-thing  :title="row.subject">
                   <template #avatar>
-<!--                    <div style="display: flex; align-items: center; height: 100%;">-->
-<!--                      <n-icon size="20" :component="EmailOutlined">-->
-<!--                      </n-icon>-->
-<!--                    </div>-->
-
-                    <n-icon style="display: flex; align-items: center; height: 100%;" size="20" :component="EmailOutlined">
+<!--                    <n-icon class = 'icon-hover' style=" vertical-align: middle;" size="20" :component="EmailSharp">-->
+                    <n-icon size="20" :component="EmailOutlined">
                     </n-icon>
 
                   </template>
                   <template #description>
-                    <span style="font-size: small">  {{ row.originalSource }} </span>
-
+<!--                    <n-tag type="info">-->
+<!--                      ID: {{ row.id }}-->
+<!--                    </n-tag>-->
+                  <div>
+                    {{ row.originalSource }}
                     <br>
-                   <span style="font-size: x-small">  {{ utcToLocalDate(row.created_at, useUTCDate) }}</span>
+<!--                    <n-icon   style=" vertical-align: middle;" :component="AccessTimeOutlined">-->
+<!--                    </n-icon>-->
 
+
+                    {{ utcToLocalDate(row.created_at, useUTCDate) }}
+                  </div>
+<!--                    FROM: {{ row.source }}-->
+
+
+<!--                    <n-tag v-if="showEMailTo" type="info">-->
+<!--                      TO: {{ row.address }}-->
+<!--                    </n-tag>-->
                   </template>
-
-
                 </n-thing>
-
-<!--                @mouseleave="handleListMouseLeave"-->
-
-<!--                <template #suffix>-->
-
-<!--                  <div v-if="hoveredItemId === row.id" style="display: flex; align-items: center; height: 100%;">-->
-<!--                    <n-popconfirm v-if="enableUserDeleteEmail" @positive-click="deleteMail" :show-icon="false"  trigger="hover"  :keep-alive-on-hover="true" >-->
-<!--                      <template #trigger>-->
-<!--                        <n-icon   class = 'icon-hover' size="20" :component="DeleteOutlineFilled" color="info" >-->
-<!--                        </n-icon>-->
-
-<!--                      </template>-->
-<!--                      {{ t('deleteMailTip') }}-->
-<!--                    </n-popconfirm>-->
-<!--                  </div>-->
-
-<!--                </template>-->
               </n-list-item>
             </n-list>
           </div>
@@ -478,38 +457,28 @@ onBeforeUnmount(() => {
 <!--        邮件具体内容-->
         <template #2>
           <n-card :bordered="false" embedded v-if="curMail" class="mail-item" :title="curMail.subject"
-            style="overflow: auto; max-height: 100vh;" @mouseover="handleCardMouseOver">
-            <span style="font-size: small">  发件人: {{ curMail.source }} </span>
-
-
-            <br>
-
-            <span style="font-size: small">    时间:{{ utcToLocalDate(curMail.created_at, useUTCDate) }} </span>
-            <n-divider />
+            style="overflow: auto; max-height: 100vh;">
             <n-space>
 <!--              <n-tag type="info">-->
 <!--                ID: {{ curMail.id }}-->
 <!--              </n-tag>-->
-
-
-
-
-
+              <n-tag type="info">
+                {{ utcToLocalDate(curMail.created_at, useUTCDate) }}
+              </n-tag>
+              <n-tag type="info">
+                FROM: {{ curMail.source }}
+              </n-tag>
 <!--              <n-tag v-if="showEMailTo" type="info">-->
 <!--                TO: {{ curMail.address }}-->
 <!--              </n-tag>-->
 <!--              删除图标-->
 <!--              <n-button tertiary type="error" size="small">{{ t('delete') }}</n-button>-->
 
-<!--              <n-icon class = 'icon-hover' style="display: flex; align-items: center; height: 100%;"  size="20" :component="DeleteOutlineFilled" color="red">-->
-<!--              </n-icon>-->
-
-              <br>
               <n-popconfirm v-if="enableUserDeleteEmail" @positive-click="deleteMail" :show-icon="false">
 
                 <template #trigger>
-                  <n-button tertiary type="error" size="small">{{ t('delete') }}</n-button>
-
+                  <n-icon class = 'icon-hover' style=" vertical-align: middle;" size="20" :component="DeleteOutlineFilled" color="red">
+                  </n-icon>
 
                 </template>
                 {{ t('deleteMailTip') }}
@@ -584,10 +553,15 @@ onBeforeUnmount(() => {
 <!--                <n-tag type="info">-->
 <!--                  ID: {{ row.id }}-->
 <!--                </n-tag>-->
-                <span style="font-size: small">  {{ row.originalSource }} </span>
-
-                <br>
-                <span style="font-size: x-small">  {{ utcToLocalDate(row.created_at, useUTCDate) }}</span>
+                <n-tag type="info">
+                  {{ utcToLocalDate(row.created_at, useUTCDate) }}
+                </n-tag>
+                <n-tag type="info">
+                  FROM: {{ row.source }}
+                </n-tag>
+                <n-tag v-if="showEMailTo" type="info">
+                  TO: {{ row.address }}
+                </n-tag>
               </template>
             </n-thing>
           </n-list-item>
@@ -641,7 +615,6 @@ onBeforeUnmount(() => {
                 {{ showTextMail ? t('showHtmlMail') : t('showTextMail') }}
               </n-button>
             </n-space>
-            <n-divider />
             <pre v-if="showTextMail" style="margin-top: 10px;">{{ curMail.text }}</pre>
             <iframe v-else-if="useIframeShowMail" :srcdoc="curMail.message"
               style="margin-top: 10px;width: 100%; height: 100%;">

@@ -121,6 +121,7 @@ onMounted(() => {
     <!--  这里是更换邮件 复制邮件的组件-->
     <AddressBar />
     <n-tabs v-if="settings.address" type="card" v-model:value="indexTab" :placement="globalTabplacement">
+      <!--       收件箱 -->
       <n-tab-pane name="mailbox" :tab="t('mailbox')">
 <!--        判断是否允许查询的地方-->
         <div v-if="showMailIdQuery" style="margin-bottom: 10px;">
@@ -131,7 +132,8 @@ onMounted(() => {
             </n-button>
           </n-input-group>
         </div>
-        <MailBox :key="mailBoxKey" :showEMailTo="false" :showReply="true" :showSaveS3="openSettings.isS3Enabled"
+<!--具体收件箱的内容-->
+        <MailBox :key="mailBoxKey" :showEMailTo="true" :showReply="false" :showSaveS3="openSettings.isS3Enabled"
           :saveToS3="saveToS3" :enableUserDeleteEmail="openSettings.enableUserDeleteEmail"
           :fetchMailData="fetchMailData" :deleteMail="deleteMail" />
       </n-tab-pane>

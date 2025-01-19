@@ -17,7 +17,7 @@ compatibility_flags = [ "nodejs_compat" ]
 
 [vars]
 # custom title 自定义网站标题
-TITLE = "TEMP EMAIL"
+TITLE = "Cute mail"
 # 自定义公告
 ANNOUNCEMENT = "您好,欢迎使用"
 PREFIX = ""  # 要处理的邮箱名称前缀，不需要后缀可配置为空字符串
@@ -29,6 +29,7 @@ PREFIX = ""  # 要处理的邮箱名称前缀，不需要后缀可配置为空�
 # MIN_ADDRESS_LEN = 1
 # MAX_ADDRESS_LEN = 30
 # IF YOU WANT TO MAKE YOUR SITE PRIVATE, UNCOMMENT THE FOLLOWING LINES
+#如果你想要你的网站私有，取消下面的注释，并修改密码
 # PASSWORDS = ["123", "456"]
 # For admin panel
  ADMIN_PASSWORDS = ["admin", "LIS7469823754@mail"]
@@ -49,7 +50,7 @@ DOMAINS = ["wangpl.online"] # all domain names
     { domains = ["wangpl.online"], role = "admin", prefix = "" },
  ]
 JWT_SECRET = "lllwpljwt"
-BLACK_LIST = ""
+BLACK_LIST = "0000001,00000002,0000004"
 # Allow users to create email addresses
 ENABLE_USER_CREATE_EMAIL = true
 # Disable anonymous user create email, if set true, users can only create email addresses after logging in
@@ -121,3 +122,7 @@ database_id = "57be3030-41c9-47e5-8d59-04119b8da73c"
 # [[services]]
 # binding = "AUTH_INBOX"
 # service = "auth-inbox"
+
+# wrangler.toml (wrangler v3.88.0^)
+[observability.logs]
+enabled = false

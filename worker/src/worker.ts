@@ -25,6 +25,10 @@ app.onError((err, c) => {
 })
 // rate limit
 app.use('/*', async (c, next) => {
+	if (c.req.path.startsWith("/api/wpl")){
+		// 如果发现是这个路由 不再继续 直接返回
+		console.info("/api/wpl您好")
+	}
 	if (
 		c.req.path.startsWith("/api/new_address")
 		|| c.req.path.startsWith("/api/send_mail")

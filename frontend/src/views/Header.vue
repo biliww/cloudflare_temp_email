@@ -239,7 +239,7 @@ onMounted(async () => {
             </template>
             <template #avatar>
                 <div @click="logoClick">
-                    <n-avatar style="margin-left: 10px;" src="/logo.png" />
+                    <n-image width="33"  preview-disabled style="margin-left: 10px;" src="/logo.png" />
                 </div>
             </template>
             <template #extra>

@@ -8,7 +8,7 @@ import { isBlocked } from "./black_list";
 import { triggerWebhook, triggerAnotherWorker, commonParseMail } from "../common";
 import { check_if_junk_mail } from "./check_junk";
 
-
+// 存储邮件
 async function email(message: ForwardableEmailMessage, env: Bindings, ctx: ExecutionContext) {
     if (await isBlocked(message.from, env)) {
         message.setReject("Reject from address");
